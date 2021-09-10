@@ -6,7 +6,7 @@ import Logo from './logo';
 
 const Navbar = () => {
 	return (
-		<header>
+		<header className={classes.header}>
 			<Link href='/'>
 				<a>
 					<Logo />
