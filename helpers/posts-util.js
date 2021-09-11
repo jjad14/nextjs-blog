@@ -6,17 +6,23 @@ import matter from 'gray-matter';
 
 const POSTS_DIRECTORY = path.join(process.cwd(), 'posts');
 
+export const getPostFiles = () => {
+	// read all files inside posts folder
+	return fs.readdirSync(POSTS_DIRECTORY);
+};
+
 // get the data for a single post
-const getPostData = (fileName) => {
-	const filePath = path.join(POSTS_DIRECTORY, fileName);
+// can take the filename with or without the file extension
+export const getPostData = (postIdentifier) => {
+	// remove file extension from post markdown file (.md)
+	const postSlug = postIdentifier.replace(/\.md$/, '');
+
+	const filePath = path.join(POSTS_DIRECTORY, `${postSlug}.md`);
 	const fileContent = fs.readFileSync(filePath, 'utf-8');
 
 	// data property for the metadata as an object
 	// content property which contains the markdown text as a string
 	const { data, content } = matter(fileContent);
-
-	// remove file extension from post markdown file (.md)
-	const postSlug = fileName.replace(/\.md$/, '');
 
 	// contains all that metadata, content and a slug field
 	const postData = {
@@ -30,7 +36,7 @@ const getPostData = (fileName) => {
 
 export const getAllPosts = () => {
 	// read all files inside posts folder
-	const postFiles = fs.readdirSync(POSTS_DIRECTORY);
+	const postFiles = getPostFiles();
 
 	// map postfiles, return an object of that post file into an array
 	const allPosts = postFiles.map((postFile) => {
